@@ -3,7 +3,9 @@ import { DOCUMENT_CATEGORIES, DEMO_DOCUMENTS, StoredDocument } from "@/data/docu
 import { getIcon } from "@/lib/icons";
 import StatusBadge from "@/components/StatusBadge";
 import { format, differenceInDays, parseISO } from "date-fns";
-import { Plus, FolderOpen } from "lucide-react";
+import { Plus, FolderOpen, LogOut } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
 
 const getDocForCategory = (categoryId: string): StoredDocument | undefined =>
   DEMO_DOCUMENTS.find((d) => d.categoryId === categoryId);
@@ -106,6 +108,7 @@ const SummaryBar = () => {
 };
 
 const Dashboard = () => {
+  const { signOut } = useAuth();
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -120,6 +123,10 @@ const Dashboard = () => {
               <p className="text-xs text-muted-foreground">Document Wallet</p>
             </div>
           </div>
+          <Button variant="ghost" size="sm" onClick={signOut} className="text-muted-foreground">
+            <LogOut className="h-4 w-4 mr-1.5" />
+            Sign Out
+          </Button>
         </div>
       </header>
 
