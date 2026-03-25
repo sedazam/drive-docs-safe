@@ -123,6 +123,10 @@ const Dashboard = () => {
               <p className="text-xs text-muted-foreground">Document Wallet</p>
             </div>
           </div>
+          <Button variant="ghost" size="sm" onClick={signOut} className="text-muted-foreground">
+            <LogOut className="h-4 w-4 mr-1.5" />
+            Sign Out
+          </Button>
         </div>
       </header>
 
