@@ -1,9 +1,21 @@
 import { motion } from "framer-motion";
-import { DOCUMENT_CATEGORIES, DEMO_DOCUMENTS, StoredDocument } from "@/data/documents";
+import { Link } from "react-router-dom";
+import {
+  DOCUMENT_CATEGORIES,
+  DEMO_DOCUMENTS,
+  StoredDocument,
+} from "@/data/documents";
 import { getIcon } from "@/lib/icons";
 import StatusBadge from "@/components/StatusBadge";
 import { format, differenceInDays, parseISO } from "date-fns";
-import { Plus, FolderOpen, LogOut } from "lucide-react";
+import {
+  Plus,
+  FolderOpen,
+  LogOut,
+  Files,
+  ShieldCheck,
+  Settings,
+} from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 
@@ -29,34 +41,37 @@ const DocumentCard = ({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.06, duration: 0.35 }}
-      className="group relative overflow-hidden rounded-lg border border-border bg-card p-4 transition-shadow hover:shadow-md cursor-pointer"
+      className="group relative overflow-hidden rounded-lg border border-border bg-card p-4 transition-shadow hover:shadow-md"
     >
       <div className="flex items-start justify-between gap-3">
-        <div className="flex items-start gap-3 min-w-0">
+        <div className="flex min-w-0 items-start gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/8 text-primary">
             <Icon className="h-5 w-5" />
           </div>
           <div className="min-w-0">
-            <h3 className="font-display text-sm font-semibold leading-tight truncate">
+            <h3 className="font-display truncate text-sm font-semibold leading-tight">
               {category.label}
             </h3>
             {doc ? (
-              <p className="mt-0.5 text-xs text-muted-foreground truncate">
+              <p className="mt-0.5 truncate text-xs text-muted-foreground">
                 {doc.name}
               </p>
             ) : (
-              <p className="mt-0.5 text-xs text-muted-foreground italic">
+              <p className="mt-0.5 text-xs italic text-muted-foreground">
                 No document uploaded
               </p>
             )}
           </div>
         </div>
+
         {doc ? (
           <StatusBadge status={doc.status} className="shrink-0" />
         ) : (
-          <button className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-dashed border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary">
-            <Plus className="h-3.5 w-3.5" />
-          </button>
+          <Link to="/upload">
+            <button className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-dashed border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary">
+              <Plus className="h-3.5 w-3.5" />
+            </button>
+          </Link>
         )}
       </div>
 
@@ -65,9 +80,11 @@ const DocumentCard = ({
           <span className="text-xs text-muted-foreground">Expires</span>
           <span className="text-xs font-medium">
             {format(parseISO(doc.expiryDate), "dd MMM yyyy")}
-            {daysUntilExpiry !== null && daysUntilExpiry > 0 && daysUntilExpiry <= 30 && (
-              <span className="ml-1 text-warning">({daysUntilExpiry}d)</span>
-            )}
+            {daysUntilExpiry !== null &&
+              daysUntilExpiry > 0 &&
+              daysUntilExpiry <= 30 && (
+                <span className="ml-1 text-warning">({daysUntilExpiry}d)</span>
+              )}
             {daysUntilExpiry !== null && daysUntilExpiry <= 0 && (
               <span className="ml-1 text-expired">(overdue)</span>
             )}
@@ -99,7 +116,9 @@ const SummaryBar = () => {
           transition={{ delay: i * 0.08 }}
           className="rounded-lg border border-border bg-card p-3 text-center"
         >
-          <p className={`font-display text-2xl font-bold ${stat.color}`}>{stat.value}</p>
+          <p className={`font-display text-2xl font-bold ${stat.color}`}>
+            {stat.value}
+          </p>
           <p className="mt-0.5 text-xs text-muted-foreground">{stat.label}</p>
         </motion.div>
       ))}
@@ -107,42 +126,120 @@ const SummaryBar = () => {
   );
 };
 
+const QuickActions = () => {
+  const actions = [
+    {
+      label: "All Documents",
+      description: "View your saved records",
+      to: "/documents",
+      icon: Files,
+    },
+    {
+      label: "Upload",
+      description: "Add a new file",
+      to: "/upload",
+      icon: Plus,
+    },
+    {
+      label: "Inspection Mode",
+      description: "Quick access during checks",
+      to: "/inspection",
+      icon: ShieldCheck,
+    },
+    {
+      label: "Settings",
+      description: "Manage preferences",
+      to: "/settings",
+      icon: Settings,
+    },
+  ];
+
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      {actions.map((action, index) => {
+        const Icon = action.icon;
+
+        return (
+          <motion.div
+            key={action.label}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.06 }}
+          >
+            <Link
+              to={action.to}
+              className="block rounded-lg border border-border bg-card p-4 transition-shadow hover:shadow-md"
+            >
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/8 text-primary">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="font-display text-sm font-semibold">
+                    {action.label}
+                  </h3>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {action.description}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          </motion.div>
+        );
+      })}
+    </div>
+  );
+};
+
 const Dashboard = () => {
   const { signOut } = useAuth();
+
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-10">
+      <header className="sticky top-0 z-10 border-b border-border bg-card/80 backdrop-blur-sm">
         <div className="container flex items-center justify-between py-4">
           <div className="flex items-center gap-2.5">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
               <FolderOpen className="h-4.5 w-4.5 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="font-display text-lg font-bold leading-tight">DriverVault</h1>
+              <h1 className="font-display text-lg font-bold leading-tight">
+                DriverWallet
+              </h1>
               <p className="text-xs text-muted-foreground">Document Wallet</p>
             </div>
           </div>
-          <Button variant="ghost" size="sm" onClick={signOut} className="text-muted-foreground">
-            <LogOut className="h-4 w-4 mr-1.5" />
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={signOut}
+            className="text-muted-foreground"
+          >
+            <LogOut className="mr-1.5 h-4 w-4" />
             Sign Out
           </Button>
         </div>
       </header>
 
-      <main className="container py-6 space-y-6">
-        {/* Summary */}
+      <main className="container space-y-6 py-6">
         <section>
-          <h2 className="font-display text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+          <h2 className="mb-3 font-display text-sm font-semibold uppercase tracking-wider text-muted-foreground">
             Overview
           </h2>
           <SummaryBar />
         </section>
 
-        {/* Documents */}
         <section>
-          <h2 className="font-display text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-            Your Documents
+          <h2 className="mb-3 font-display text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+            Quick Actions
+          </h2>
+          <QuickActions />
+        </section>
+
+        <section>
+          <h2 className="mb-3 font-display text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+            Required Documents
           </h2>
           <div className="grid gap-3 sm:grid-cols-2">
             {DOCUMENT_CATEGORIES.map((cat, i) => (
