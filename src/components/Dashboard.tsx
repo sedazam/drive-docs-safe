@@ -108,6 +108,7 @@ const SummaryBar = () => {
 };
 
 const Dashboard = () => {
+  const { signOut } = useAuth();
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
