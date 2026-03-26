@@ -3,7 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FolderOpen, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import { Logo } from "@/components/Logo";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 
@@ -22,7 +23,10 @@ const Auth = () => {
 
     try {
       if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
         if (error) throw error;
         navigate("/");
       } else {
@@ -37,7 +41,8 @@ const Auth = () => {
         if (error) throw error;
         toast({
           title: "Check your email",
-          description: "We've sent you a confirmation link to verify your account.",
+          description:
+            "We've sent you a confirmation link to verify your account.",
         });
       }
     } catch (error: any) {
@@ -56,12 +61,14 @@ const Auth = () => {
       <div className="w-full max-w-sm space-y-6">
         {/* Logo */}
         <div className="flex flex-col items-center gap-2">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary">
-            <FolderOpen className="h-6 w-6 text-primary-foreground" />
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl">
+            <Logo className="h-6 w-6 text-primary-foreground" />
           </div>
           <h1 className="font-display text-2xl font-bold">DriverVault</h1>
           <p className="text-sm text-muted-foreground">
-            {isLogin ? "Sign in to your document wallet" : "Create your document wallet"}
+            {isLogin
+              ? "Sign in to your document wallet"
+              : "Create your document wallet"}
           </p>
         </div>
 
