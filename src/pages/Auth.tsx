@@ -61,8 +61,8 @@ const Auth = () => {
       <div className="w-full max-w-sm space-y-6">
         {/* Logo */}
         <div className="flex flex-col items-center gap-2">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl">
-            <Logo className="h-6 w-6 text-primary-foreground" />
+          <div className="flex h-18 w-18 items-center justify-center rounded-xl">
+            <Logo className="h-9 w-9 text-primary-foreground" />
           </div>
           <h1 className="font-display text-2xl font-bold">DriverWallet</h1>
           <p className="text-sm text-muted-foreground">

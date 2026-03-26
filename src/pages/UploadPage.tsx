@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  FolderOpen,
   Home,
   LogOut,
   Settings,
@@ -9,6 +8,7 @@ import {
   Files,
   Upload as UploadIcon,
 } from "lucide-react";
+import { Logo } from "@/components/Logo";
 
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -145,8 +145,8 @@ export default function UploadPage() {
       <header className="sticky top-0 z-10 border-b border-border bg-card/80 backdrop-blur-sm">
         <div className="container flex items-center justify-between py-4">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-              <FolderOpen className="h-4.5 w-4.5 text-primary-foreground" />
+            <div className="flex h-18 w-18 items-center justify-center rounded-lg">
+              <Logo className="h-12 w-12" />
             </div>
             <div>
               <h1 className="font-display text-lg font-bold leading-tight">

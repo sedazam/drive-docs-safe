@@ -8,14 +8,8 @@ import {
 import { getIcon } from "@/lib/icons";
 import StatusBadge from "@/components/StatusBadge";
 import { format, differenceInDays, parseISO } from "date-fns";
-import {
-  Plus,
-  FolderOpen,
-  LogOut,
-  Files,
-  ShieldCheck,
-  Settings,
-} from "lucide-react";
+import { Plus, LogOut, Files, ShieldCheck, Settings } from "lucide-react";
+import { Logo } from "@/components/Logo";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 
@@ -199,14 +193,16 @@ const Dashboard = () => {
       <header className="sticky top-0 z-10 border-b border-border bg-card/80 backdrop-blur-sm">
         <div className="container flex items-center justify-between py-4">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-              <FolderOpen className="h-4.5 w-4.5 text-primary-foreground" />
+            <div className="flex h-18 w-18 items-center justify-center rounded-lg">
+              <Logo className="h-12 w-12" />
             </div>
             <div>
               <h1 className="font-display text-lg font-bold leading-tight">
                 DriverWallet
               </h1>
-              <p className="text-xs text-muted-foreground">Document Wallet</p>
+              <p className="text-xs text-muted-foreground">
+                All your driver documents in one secure wallet.
+              </p>
             </div>
           </div>
 
@@ -223,13 +219,6 @@ const Dashboard = () => {
       </header>
 
       <main className="container space-y-6 py-6">
-        <section>
-          <h2 className="mb-3 font-display text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-            Overview
-          </h2>
-          <SummaryBar />
-        </section>
-
         <section>
           <h2 className="mb-3 font-display text-sm font-semibold uppercase tracking-wider text-muted-foreground">
             Quick Actions
