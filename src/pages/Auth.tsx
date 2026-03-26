@@ -66,9 +66,7 @@ const Auth = () => {
           </div>
           <h1 className="font-display text-2xl font-bold">DriverWallet</h1>
           <p className="text-sm text-muted-foreground">
-            {isLogin
-              ? "Sign in to your document wallet"
-              : "Create your document wallet"}
+            {isLogin ? "Sign in to your wallet" : "Create your wallet"}
           </p>
         </div>
 
