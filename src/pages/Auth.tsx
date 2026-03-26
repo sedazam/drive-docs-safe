@@ -64,7 +64,7 @@ const Auth = () => {
           <div className="flex h-12 w-12 items-center justify-center rounded-xl">
             <Logo className="h-6 w-6 text-primary-foreground" />
           </div>
-          <h1 className="font-display text-2xl font-bold">DriverVault</h1>
+          <h1 className="font-display text-2xl font-bold">DriverWallet</h1>
           <p className="text-sm text-muted-foreground">
             {isLogin
               ? "Sign in to your document wallet"
