@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 const Auth = () => {
@@ -16,6 +17,7 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { session } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,6 +57,12 @@ const Auth = () => {
       setLoading(false);
     }
   };
+  // Navigate to home if session is set and on /auth
+  useEffect(() => {
+    if (session) {
+      navigate("/");
+    }
+  }, [session, navigate]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
