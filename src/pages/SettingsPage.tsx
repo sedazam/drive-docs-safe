@@ -3,6 +3,10 @@ import { Home, LogOut, Files, Plus, ShieldCheck } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function SettingsPage() {
   const { signOut } = useAuth();
@@ -67,13 +71,78 @@ export default function SettingsPage() {
         </nav>
 
         <section className="rounded-lg border border-border bg-card p-6">
-          <h2 className="font-display text-xl font-semibold">Settings</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            This page will contain profile details, app preferences, and backup
-            options later.
-          </p>
+          <h2 className="font-display text-xl font-semibold mb-4">
+            Profile Details
+          </h2>
+          <ProfileDetails />
         </section>
       </main>
     </div>
+  );
+}
+
+function ProfileDetails() {
+  const { user } = useAuth();
+  const [profile, setProfile] = useState<any>(null);
+  const [address, setAddress] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [status, setStatus] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from("profiles")
+      .select("full_name, phone, vehicle_reg, address")
+      .eq("user_id", user.id)
+      .single()
+      .then(({ data }) => {
+        setProfile(data);
+        setAddress(data?.address || "");
+      });
+  }, [user]);
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) return;
+    setSaving(true);
+    setStatus(null);
+    const { error } = await supabase
+      .from("profiles")
+      .update({ address })
+      .eq("user_id", user.id);
+    setSaving(false);
+    setStatus(error ? "Failed to save" : "Saved!");
+  };
+
+  if (!profile) return <div>Loading...</div>;
+
+  return (
+    <form onSubmit={handleSave} className="space-y-4 max-w-md">
+      <div>
+        <Label>Full Name</Label>
+        <Input value={profile.full_name || ""} disabled />
+      </div>
+      <div>
+        <Label>Phone</Label>
+        <Input value={profile.phone || ""} disabled />
+      </div>
+      <div>
+        <Label>Vehicle Registration</Label>
+        <Input value={profile.vehicle_reg || ""} disabled />
+      </div>
+      <div>
+        <Label htmlFor="address">Address</Label>
+        <Input
+          id="address"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          placeholder="Enter your address"
+        />
+      </div>
+      <Button type="submit" disabled={saving}>
+        {saving ? "Saving..." : "Save"}
+      </Button>
+      {status && <div className="text-xs text-muted-foreground">{status}</div>}
+    </form>
   );
 }

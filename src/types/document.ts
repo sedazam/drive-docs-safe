@@ -44,4 +44,5 @@ export type DriverProfile = {
   privateHireLicenceNumber?: string;
   badgeNumber?: string;
   vehicleRegistration?: string;
+  address?: string;
 };

@@ -1,4 +1,5 @@
-import type { DocumentCategory, StoredDocument } from "@/types/document";
+export type { StoredDocument } from "@/types/document";
+import type { DocumentCategory } from "@/types/document";
 
 export const DOCUMENT_CATEGORIES: DocumentCategory[] = [
   {
